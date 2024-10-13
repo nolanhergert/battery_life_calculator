@@ -7,7 +7,7 @@
     <style>
         table {
             border-collapse: collapse;
-            width: 100%;
+            width: auto;
         }
         th, td {
             border: 1px solid black;
@@ -18,8 +18,15 @@
             width: 80px;
         }
         .add-button {
-            margin: 10px;
             cursor: pointer;
+            margin: 10px;
+        }
+        #rowAddButton {
+            margin-top: 10px;
+        }
+        #columnAddButton {
+            position: absolute;
+            margin-left: 10px;
         }
     </style>
 </head>
@@ -31,9 +38,7 @@
                 <th><input class="input-header" type="text" value="Component" oninput="updateURL()" /></th>
                 <th><input class="input-header" type="text" value="Idle" oninput="updateURL()" /></th>
                 <th><input class="input-header" type="text" value="Active" oninput="updateURL()" /></th>
-                <th>
-                    <button class="add-button" onclick="addColumn()">+ Add State</button>
-                </th>
+                <th id="columnAddButton"><button class="add-button" onclick="addColumn()">+ Add State</button></th>
             </tr>
         </thead>
         <tbody>
@@ -41,10 +46,10 @@
                 <td><input class="input-header" type="text" value="Component 1" oninput="updateURL()" /></td>
                 <td><input class="input-cell" type="number" value="0" oninput="calculateTotal()" /></td>
                 <td><input class="input-cell" type="number" value="0" oninput="calculateTotal()" /></td>
-                <td><button class="add-button" onclick="addRow()">+ Add Component</button></td>
             </tr>
         </tbody>
     </table>
+    <button id="rowAddButton" class="add-button" onclick="addRow()">+ Add Component</button>
     <p>Total Power Consumption: <span id="totalPower">0</span> W</p>
 
     <script>
@@ -73,23 +78,22 @@
             });
         }
 
+        // Adds a new row
         function addRow() {
             const table = document.querySelector('#powerTable tbody');
             const row = table.insertRow();
             const componentCell = row.insertCell(0);
             componentCell.innerHTML = '<input class="input-header" type="text" value="New Component" oninput="updateURL()" />';
             
-            const columnCount = document.querySelector('#powerTable thead tr').cells.length - 1;
-            for (let i = 1; i < columnCount; i++) {
+            const columnCount = document.querySelector('#powerTable thead tr').cells.length - 2;
+            for (let i = 1; i <= columnCount; i++) {
                 const cell = row.insertCell(i);
                 cell.innerHTML = '<input class="input-cell" type="number" value="0" oninput="calculateTotal()" />';
             }
-            
-            const addButtonCell = row.insertCell(columnCount);
-            addButtonCell.innerHTML = '<button class="add-button" onclick="addRow()">+ Add Component</button>';
             updateURL();  // Update URL when a new row is added
         }
 
+        // Adds a new column
         function addColumn() {
             const headerRow = document.querySelector('#powerTable thead tr');
             const newStateCell = document.createElement('th');
@@ -98,7 +102,7 @@
 
             const rows = document.querySelectorAll('#powerTable tbody tr');
             rows.forEach(row => {
-                const newCell = row.insertCell(row.cells.length - 1);
+                const newCell = row.insertCell(row.cells.length);
                 newCell.innerHTML = '<input class="input-cell" type="number" value="0" oninput="calculateTotal()" />';
             });
             updateURL();  // Update URL when a new column is added
