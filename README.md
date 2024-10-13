@@ -1,6 +1,8 @@
 # Battery Life / Charging Time Calculator
 
-Not functional yet! ChatGPT helps out a lot though.
+Not functional yet! ChatGPT helps out a lot!
+
+https://nolanhergert.github.io/battery_life_calculator
 
 
 It is helpful to estimate the battery life ahead of time to see what tricks you need to do in order to reach the form factor you want. If you can't (even after tricks), why bother designing, laying out, and making the boards!
