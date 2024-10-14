@@ -35,21 +35,23 @@
     <table id="powerTable">
         <thead>
             <tr id="headerRow">
-                <th><input class="input-header" type="text" value="Component" oninput="updateURL()" /></th>
-                <th><input class="input-header" type="text" value="Idle" oninput="updateURL()" /></th>
-                <th><input class="input-header" type="text" value="Active" oninput="updateURL()" /></th>
-                <th id="columnAddButton"><button class="add-button" onclick="addColumn()">+ Add State</button></th>
+                <th></th>
+                <th><input class="input-header" type="text" value="Sleep" /></th>
+                <th><input class="input-header" type="text" value="Active" /></th>
             </tr>
         </thead>
+		<button class="add-button" onclick="addColumn()">+ Add State</button>
         <tbody>
             <tr>
-                <td><input class="input-header" type="text" value="Component 1" oninput="updateURL()" /></td>
+                <td><input class="input-header" type="text" value="Component 1" /></td>
                 <td><input class="input-cell" type="number" value="0" oninput="calculateTotal()" /></td>
                 <td><input class="input-cell" type="number" value="0" oninput="calculateTotal()" /></td>
             </tr>
         </tbody>
     </table>
     <button id="rowAddButton" class="add-button" onclick="addRow()">+ Add Component</button>
+	<button class="add-button" onclick="updateURL()">Copy URL to Clipboard</button>
+	
     <p>Total Power Consumption: <span id="totalPower">0</span> W</p>
 
     <script>
@@ -85,7 +87,7 @@
             const componentCell = row.insertCell(0);
             componentCell.innerHTML = '<input class="input-header" type="text" value="New Component" oninput="updateURL()" />';
             
-            const columnCount = document.querySelector('#powerTable thead tr').cells.length - 2;
+            const columnCount = document.querySelector('#powerTable thead tr').cells.length - 1;
             for (let i = 1; i <= columnCount; i++) {
                 const cell = row.insertCell(i);
                 cell.innerHTML = '<input class="input-cell" type="number" value="0" oninput="calculateTotal()" />';
@@ -126,6 +128,8 @@
             const urlParams = new URLSearchParams();
             urlParams.set('data', JSON.stringify(tableData));
             window.history.replaceState(null, '', '?' + urlParams.toString());
+			
+			// navigator.clipboard.writeText(window.location.href);
         }
 
         // Restore table state from URL
@@ -139,13 +143,13 @@
 
             // Add states (columns) from the URL
             parsedData.headers.forEach((header, index) => {
-                if (index > 1) addColumn();  // Add columns as needed
+                addColumn();  // Add columns as needed
                 headerRow.querySelectorAll('input')[index + 1].value = header;  // Populate column headers
             });
 
             // Add components (rows) and values from the URL
             parsedData.components.forEach((component, index) => {
-                if (index > 0) addRow();  // Add rows as needed
+                addRow();  // Add rows as needed
                 const row = document.querySelectorAll('#powerTable tbody tr')[index];
                 row.querySelector('input[type="text"]').value = component.name;  // Set component name
                 component.values.forEach((value, colIndex) => {
